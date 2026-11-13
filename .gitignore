@@ -1,0 +1,39 @@
+# .NET
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.cache
+
+# Node
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.p12
+*.key
+service-account*.json
+
+# IDE / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# Test / coverage
+TestResults/
+coverage/
+
+# Local database / uploads
+*.db
+*.sqlite
+uploads/

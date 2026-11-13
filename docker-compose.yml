@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: opspulse-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-opspulse}
+      POSTGRES_USER: ${POSTGRES_USER:-opspulse_dev}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local_only_change_me}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - opspulse-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-opspulse_dev} -d ${POSTGRES_DB:-opspulse}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  opspulse-postgres-data:
