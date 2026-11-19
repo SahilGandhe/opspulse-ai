@@ -79,6 +79,34 @@ app.UseCors("Frontend");
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
+// The hosted demo is public and unauthenticated, so SQLite demo mode is
+// read-only: visitors may read the seeded synthetic incidents and run the
+// simulated analysis on them, but no new data can be written. Real
+// deployments use PostgreSQL with authentication (see docs/ARCHITECTURE.md).
+if (!usingPostgres)
+{
+    app.Use(async (context, next) =>
+    {
+        var path = context.Request.Path.Value ?? string.Empty;
+        var isWrite = !HttpMethods.IsGet(context.Request.Method)
+                      && !HttpMethods.IsHead(context.Request.Method)
+                      && !HttpMethods.IsOptions(context.Request.Method);
+        var isSimulatedAnalysis = HttpMethods.IsPost(context.Request.Method)
+                      && path.EndsWith("/analyze", StringComparison.OrdinalIgnoreCase);
+        if (isWrite && path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase)
+                     && !isSimulatedAnalysis)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsJsonAsync(new
+            {
+                error = "This public demo is read-only. It serves seeded synthetic incidents only; simulated analysis runs on those seeded incidents."
+            });
+            return;
+        }
+        await next();
+    });
+}
+
 app.MapGet("/api/health", () => Results.Ok(new
 {
     status = "healthy",
