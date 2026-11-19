@@ -23,8 +23,8 @@ public sealed class Incident
     public required string ServiceName { get; set; }
     public IncidentSeverity Severity { get; set; } = IncidentSeverity.Medium;
     public IncidentStatus Status { get; set; } = IncidentStatus.Open;
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-    public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     public List<IncidentLog> Logs { get; set; } = [];
 }
 
@@ -34,6 +34,6 @@ public sealed class IncidentLog
     public Guid IncidentId { get; set; }
     public required string Message { get; set; }
     public string Level { get; set; } = "INFO";
-    public DateTimeOffset? OccurredAt { get; set; }
-    public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+    public DateTime? OccurredAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
