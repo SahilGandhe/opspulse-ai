@@ -180,6 +180,43 @@ export const DEMO_INCIDENTS: Incident[] = [
       log('INFO', min(120), 'Operator paused consumers and drained queue; provider rate limit reset', 35),
       log('INFO', min(90), 'Retry queue empty; worker healthy, marking incident resolved', 36),
     ]),
+  incident(5, 'Checkout latency spike after v1.9.0 deploy',
+    'Checkout page API latency jumped right after the v1.9.0 rollout; p95 stayed above the alert threshold for 40 minutes.',
+    'checkout-service', 'High', 'Resolved', min(4560), [
+      log('INFO', min(4560), 'Deployment marker: checkout-service v1.9.0 rollout started', 41),
+      log('WARN', min(4330), 'GET /checkout/summary latency p95 crossed 1400ms (threshold 400ms)', 42),
+      log('WARN', min(4318), 'GET /checkout/summary latency p95 = 1920ms; downstream pricing call slow', 43),
+      log('WARN', min(4301), 'Latency concentrated in PricingClient.GetQuoteAsync; upstream pricing-service p95 = 1710ms', 44),
+      log('INFO', min(4260), 'Rollback marker: checkout-service reverted to v1.8.3', 45),
+      log('INFO', min(4180), 'GET /checkout/summary latency p95 back to 310ms; closing incident', 46),
+    ]),
+  incident(6, 'TLS certificate expiring on edge gateway',
+    'Certificate monitoring shows the public edge gateway certificate expires within the alert window.',
+    'edge-gateway', 'Medium', 'Open', min(6120), [
+      log('WARN', min(6120), 'TLS certificate for api.demo-example.com expires in 9 days (threshold 14 days)', 51),
+      log('WARN', min(5880), 'TLS certificate for api.demo-example.com expires in 8 days; renewal not yet scheduled', 52),
+      log('WARN', min(5040), 'TLS certificate for api.demo-example.com expires in 7 days', 53),
+      log('INFO', min(4560), 'Renewal request opened with the certificate owner; awaiting scheduled change window', 54),
+    ]),
+  incident(7, 'Report worker OOM restarts',
+    'report-worker was restarted repeatedly after exceeding its memory limit during the nightly batch.',
+    'report-worker', 'Critical', 'Resolved', min(11640), [
+      log('WARN', min(11640), 'Memory usage 82% of 512Mi limit during nightly report batch', 61),
+      log('ERROR', min(11592), "System.OutOfMemoryException: Exception of type 'System.OutOfMemoryException' was thrown. at Reporting.Worker.Rendering.PdfRenderer.Render(ReportJob job)", 62),
+      log('ERROR', min(11585), 'Container report-worker-7d9f restarted by orchestrator (OOMKilled, exit 137)', 63),
+      log('ERROR', min(11562), 'System.OutOfMemoryException during batch job job_44821 processing 38000 rows in a single pass', 64),
+      log('WARN', min(11545), 'Memory pressure: GC overhead 41% during batch window', 65),
+      log('INFO', min(11280), 'Batch switched to 2000-row pages; nightly run completed within memory limit, incident resolved', 66),
+    ]),
+  incident(8, 'Intermittent DNS resolution failures',
+    'inventory-service intermittently failed to resolve its cache host, causing transient checkout errors.',
+    'inventory-service', 'Medium', 'Resolved', min(17460), [
+      log('ERROR', min(17460), 'System.Net.Sockets.SocketException: No such host is known. (cache.demo-example.internal:6379)', 71),
+      log('WARN', min(17410), 'Name resolution retry succeeded after 2 attempts for cache.demo-example.internal', 72),
+      log('ERROR', min(17393), 'System.Net.Sockets.SocketException: No such host is known. (cache.demo-example.internal:6379)', 73),
+      log('WARN', min(17370), 'DNS latency to resolver 10.0.0.2 spiked to 900ms during failure window', 74),
+      log('INFO', min(17340), 'Resolver failover completed; no further resolution failures observed, incident resolved', 75),
+    ]),
 ]
 
 export function analyzeLocally(target: Incident): Promise<IncidentAnalysisResult> {
@@ -248,4 +285,4 @@ export function analyzeLocally(target: Incident): Promise<IncidentAnalysisResult
     safetyNotice: SAFETY_NOTICE,
     message: 'Simulated analysis completed.',
   })
-}
+      }
