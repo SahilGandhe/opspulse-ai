@@ -66,7 +66,7 @@ function App() {
           <a className="nav-item"><Clock3 size={17}/> Incident history</a>
         </nav>
         <div className="sidebar-bottom">
-          <div className="status-card"><span className="status-dot"/><div><strong>{mode === 'api' ? 'API connected' : 'Browser demo'}</strong><small>{mode === 'api' ? 'Local API + SQLite demo data' : 'No server needed'}</small></div></div>
+          <div className="status-card"><span className="status-dot"/><div><strong>{mode === 'api' ? 'API connected' : 'Browser demo'}</strong><small>{mode === 'api' ? 'Live API + SQLite demo data' : 'No server needed'}</small></div></div>
           <div className="profile"><div className="profile-avatar">SG</div><div><strong>Workspace Admin</strong><small>Demo preview</small></div><ChevronDown size={15}/></div>
         </div>
       </aside>
@@ -89,7 +89,7 @@ function App() {
             ? <IncidentDetail incident={selected} mode={mode} onBack={() => setSelectedId(null)} />
             : <Overview incidents={incidents} onOpen={openIncident} />}
 
-          <footer><span>RootBeacon <b>·</b> Demo build, synthetic data only</span><span>{mode === 'api' ? `API: ${api.base}` : 'Standalone browser demo'}</span></footer>
+          <footer><span>RootBeacon <b>·</b> Demo build, synthetic data only</span><span>{mode === 'api' ? `API: ${api.base || 'same origin'}` : 'Standalone browser demo'}</span></footer>
         </section>
       </main>
     </div>
