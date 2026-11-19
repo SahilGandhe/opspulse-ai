@@ -1,6 +1,8 @@
 import type { Incident, IncidentAnalysisResult } from './types'
 
-const API_BASE: string = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'
+// Same origin by default (the API serves the built frontend in the hosted
+// demo). Set VITE_API_BASE_URL to point at a separate API in local dev.
+const API_BASE: string = import.meta.env.VITE_API_BASE_URL || ''
 
 async function request<T>(path: string, init?: RequestInit, timeoutMs = 5000): Promise<T> {
   const controller = new AbortController()
