@@ -6,7 +6,7 @@
 
 RootBeacon helps small engineering teams investigate production incidents by analyzing application logs, identifying evidence-backed root-cause hypotheses, and generating actionable troubleshooting recommendations.
 
-> Project status: Working demo. The API runs zero-config with a seeded SQLite demo database, and the React dashboard shows evidence-linked, clearly labeled **simulated** analysis (deterministic, local, no external AI). The Gemini adapter, authentication, multi-tenancy, migrations, tests and production deployment are still open before real customer use.
+> Project status: Working demo. The API runs zero-config with a seeded SQLite demo database (eight synthetic incidents), and the React app provides an operations dashboard, incident browser with filters, evidence-linked incident detail, clearly labeled **simulated** analysis (deterministic, local, no external AI), per-browser investigation history and workspace settings. The hosted public demo is read-only: visitors can read seeded incidents and run simulated analysis, nothing else. The Gemini adapter, authentication, multi-tenancy, migrations, tests and production hardening are still open before real customer use.
 
 ## Product goals
 
