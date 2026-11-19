@@ -19,13 +19,13 @@ public sealed class SimulatedIncidentAnalysisService(
     IRedactionService redaction) : IIncidentAnalysisService
 {
     private const string SafetyNotice =
-        "OpsPulse suggests; humans decide. Suggested actions are written for a human " +
+        "RootBeacon suggests; humans decide. Suggested actions are written for a human " +
         "operator and are never executed by the product. Validate any change in a " +
         "non-production environment first.";
 
     private const string ModeLabel = "simulated-deterministic";
     private const string ProviderLabel =
-        "OpsPulse simulated analysis engine (local, deterministic, no external AI)";
+        "RootBeacon simulated analysis engine (local, deterministic, no external AI)";
 
     public async Task<IncidentAnalysisResult> AnalyzeAsync(
         Guid incidentId, CancellationToken cancellationToken)
