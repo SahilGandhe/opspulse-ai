@@ -73,6 +73,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("Frontend");
+
+// Hosted demo: serve the built React frontend from wwwroot so the whole app
+// is reachable at one URL. In local dev the Vite dev server is used instead.
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 app.MapGet("/api/health", () => Results.Ok(new
 {
     status = "healthy",
@@ -81,5 +87,6 @@ app.MapGet("/api/health", () => Results.Ok(new
     timestampUtc = DateTime.UtcNow
 }));
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 app.Run();
