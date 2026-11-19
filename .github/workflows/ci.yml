@@ -51,3 +51,8 @@ jobs:
           curl -sf http://localhost:8080/api/incidents | grep -q '\['
           curl -sf http://localhost:8080/ | grep -qi 'RootBeacon'
           curl -sf http://localhost:8080/api/health | grep -q 'sqlite-demo'
+          # Demo mode is read-only: writes must be rejected, simulated
+          # analysis of seeded incidents must still work.
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST http://localhost:8080/api/incidents -H 'Content-Type: application/json' -d '{}')" = "403"
+          ID=$(curl -s http://localhost:8080/api/incidents | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+          curl -sf -X POST "http://localhost:8080/api/incidents/$ID/analyze" | grep -qi 'simulated'
