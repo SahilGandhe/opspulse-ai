@@ -1,8 +1,10 @@
-# OpsPulse AI
+# RootBeacon (working name)
+
+*Find the cause. Plan the fix.*
 
 **AI-powered incident intelligence for engineering teams.**
 
-OpsPulse AI helps small engineering teams investigate production incidents by analyzing application logs, identifying evidence-backed root-cause hypotheses, and generating actionable troubleshooting recommendations.
+RootBeacon helps small engineering teams investigate production incidents by analyzing application logs, identifying evidence-backed root-cause hypotheses, and generating actionable troubleshooting recommendations.
 
 > Project status: Working demo. The API runs zero-config with a seeded SQLite demo database, and the React dashboard shows evidence-linked, clearly labeled **simulated** analysis (deterministic, local, no external AI). The Gemini adapter, authentication, multi-tenancy, migrations, tests and production deployment are still open before real customer use.
 
