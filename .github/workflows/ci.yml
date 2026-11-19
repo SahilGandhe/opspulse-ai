@@ -33,3 +33,21 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t rootbeacon-ci .
+      - name: Run and smoke test
+        run: |
+          docker run -d --name app -p 8080:8080 rootbeacon-ci
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/api/health > /tmp/health.json; then break; fi
+            sleep 2
+          done
+          cat /tmp/health.json
+          curl -sf http://localhost:8080/api/incidents | grep -q '\['
+          curl -sf http://localhost:8080/ | grep -qi 'RootBeacon'
+          curl -sf http://localhost:8080/api/health | grep -q 'sqlite-demo'
