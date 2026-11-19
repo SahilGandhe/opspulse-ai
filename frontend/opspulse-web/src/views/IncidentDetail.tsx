@@ -23,10 +23,15 @@ export function IncidentDetail({ id }: { id: string }) {
     setAnalysis(null)
     setError(null)
     setLevelFilter(new Set())
+  }, [id])
+
+  // The list payload carries logs: null, so a deep link or refresh on this
+  // page must fetch the full incident once the list has loaded.
+  useEffect(() => {
     if (incident && !incident.logs) {
       loadIncident(id).then(full => { if (!full) setError('Could not load the full incident from the API.') })
     }
-  }, [id]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id, incident]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (settings.autoAnalyze && incident?.logs && !autoRan.current && !analysis && !running) {
