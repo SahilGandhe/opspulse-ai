@@ -12,9 +12,16 @@ public sealed record CreateIncidentRequest(
 public sealed record AddIncidentLogRequest(
     [property: Required, StringLength(12000, MinimumLength = 1)] string Message,
     [property: StringLength(20)] string? Level,
-    DateTimeOffset? OccurredAt);
+    DateTime? OccurredAt);
 
 public sealed record UpdateIncidentStatusRequest(IncidentStatus Status);
+
+public sealed record IncidentLogResponse(
+    Guid Id,
+    string Message,
+    string Level,
+    DateTime? OccurredAt,
+    DateTime CreatedAt);
 
 public sealed record IncidentResponse(
     Guid Id,
@@ -23,12 +30,20 @@ public sealed record IncidentResponse(
     string ServiceName,
     IncidentSeverity Severity,
     IncidentStatus Status,
-    DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt,
-    int LogCount)
+    DateTime CreatedAt,
+    DateTime UpdatedAt,
+    int LogCount,
+    IReadOnlyList<IncidentLogResponse>? Logs)
 {
-    public static IncidentResponse From(Incident incident) => new(
+    public static IncidentResponse From(Incident incident, bool includeLogs = false) => new(
         incident.Id, incident.Title, incident.Description, incident.ServiceName,
         incident.Severity, incident.Status, incident.CreatedAt, incident.UpdatedAt,
-        incident.Logs.Count);
+        incident.Logs.Count,
+        includeLogs
+            ? incident.Logs
+                .OrderBy(x => x.OccurredAt ?? x.CreatedAt)
+                .Select(x => new IncidentLogResponse(
+                    x.Id, x.Message, x.Level, x.OccurredAt, x.CreatedAt))
+                .ToList()
+            : null);
 }
