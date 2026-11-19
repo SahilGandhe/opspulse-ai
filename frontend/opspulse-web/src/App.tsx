@@ -56,7 +56,7 @@ function App() {
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand"><div className="brand-mark"><Activity size={19} /></div><span>OpsPulse<span className="brand-ai"> AI</span></span></div>
+        <div className="brand"><div className="brand-mark"><Activity size={19} /></div><span>RootBeacon</span></div>
         <div className="workspace"><div className="workspace-avatar">A</div><div><strong>Acme Engineering</strong><small>Demo workspace</small></div><ChevronDown size={15} /></div>
         <div className="nav-label">WORKSPACE</div>
         <nav>
@@ -82,14 +82,14 @@ function App() {
             <div className="notice"><div className="notice-icon"><FlaskConical size={18}/></div><div><strong>Browser demo mode</strong><p>The API is not connected, so this dashboard runs entirely in your browser with synthetic incidents and a local simulated analyzer. No data leaves your device.</p></div><span className="notice-tag">SIMULATED</span></div>
           )}
           {mode === 'api' && (
-            <div className="notice ok"><div className="notice-icon"><ShieldCheck size={18}/></div><div><strong>Demo environment</strong><p>Connected to the local OpsPulse API with a seeded SQLite demo database. All incidents are synthetic. Analysis is simulated and deterministic, not a live AI model.</p></div><span className="notice-tag">DEMO DATA</span></div>
+            <div className="notice ok"><div className="notice-icon"><ShieldCheck size={18}/></div><div><strong>Demo environment</strong><p>Connected to the local RootBeacon API with a seeded SQLite demo database. All incidents are synthetic. Analysis is simulated and deterministic, not a live AI model.</p></div><span className="notice-tag">DEMO DATA</span></div>
           )}
 
           {selected
             ? <IncidentDetail incident={selected} mode={mode} onBack={() => setSelectedId(null)} />
             : <Overview incidents={incidents} onOpen={openIncident} />}
 
-          <footer><span>OpsPulse AI <b>·</b> Demo build, synthetic data only</span><span>{mode === 'api' ? `API: ${api.base}` : 'Standalone browser demo'}</span></footer>
+          <footer><span>RootBeacon <b>·</b> Demo build, synthetic data only</span><span>{mode === 'api' ? `API: ${api.base}` : 'Standalone browser demo'}</span></footer>
         </section>
       </main>
     </div>
