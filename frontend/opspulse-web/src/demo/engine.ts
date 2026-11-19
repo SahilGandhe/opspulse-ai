@@ -12,7 +12,7 @@ import type {
 // "simulated" exactly like the backend's demo analyzer.
 
 const SAFETY_NOTICE =
-  'OpsPulse suggests; humans decide. Suggested actions are written for a human ' +
+  'RootBeacon suggests; humans decide. Suggested actions are written for a human ' +
   'operator and are never executed by the product. Validate any change in a ' +
   'non-production environment first.'
 
@@ -189,7 +189,7 @@ export function analyzeLocally(target: Incident): Promise<IncidentAnalysisResult
   if (logs.length === 0) {
     return Promise.resolve({
       status: 'simulated', mode: 'simulated-deterministic',
-      provider: 'OpsPulse simulated analysis engine (local, deterministic, no external AI)',
+      provider: 'RootBeacon simulated analysis engine (local, deterministic, no external AI)',
       summary: `Incident "${target.title}" has no log records yet. Add log lines so the analysis engine has evidence to inspect.`,
       hypotheses: [],
       suggestedActions: [{
@@ -243,7 +243,7 @@ export function analyzeLocally(target: Incident): Promise<IncidentAnalysisResult
 
   return Promise.resolve({
     status: 'simulated', mode: 'simulated-deterministic',
-    provider: 'OpsPulse simulated analysis engine (local, deterministic, no external AI)',
+    provider: 'RootBeacon simulated analysis engine (local, deterministic, no external AI)',
     summary, hypotheses, suggestedActions: actions,
     safetyNotice: SAFETY_NOTICE,
     message: 'Simulated analysis completed.',
