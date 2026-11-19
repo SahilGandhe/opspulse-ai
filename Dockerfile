@@ -1,3 +1,11 @@
+# Build the React frontend.
+FROM node:22-alpine AS frontend
+WORKDIR /frontend
+COPY frontend/opspulse-web/package.json ./
+RUN npm install
+COPY frontend/opspulse-web/ ./
+RUN npm run build
+
 # Build and publish the ASP.NET Core API.
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
@@ -11,4 +19,5 @@ WORKDIR /app
 ENV ASPNETCORE_URLS=http://0.0.0.0:8080
 EXPOSE 8080
 COPY --from=build /app/publish .
+COPY --from=frontend /frontend/dist ./wwwroot
 ENTRYPOINT ["dotnet", "OpsPulse.Api.dll"]
