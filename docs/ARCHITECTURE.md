@@ -2,7 +2,7 @@
 
 ## Current direction
 
-OpsPulse AI starts as a modular monolith. This keeps deployment and operations manageable while the product and customer needs are still being validated.
+RootBeacon starts as a modular monolith. This keeps deployment and operations manageable while the product and customer needs are still being validated.
 
 ## Components
 
