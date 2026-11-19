@@ -23,11 +23,12 @@ public sealed class IncidentsController(
     {
         var incidents = await Db.Incidents
             .AsNoTracking()
+            .Include(x => x.Logs)
             .OrderByDescending(x => x.CreatedAt)
             .Take(100)
             .ToListAsync(cancellationToken);
 
-        return Ok(incidents.Select(IncidentResponse.From).ToList());
+        return Ok(incidents.Select(x => IncidentResponse.From(x)).ToList());
     }
 
     [HttpGet("{id:guid}")]
@@ -39,7 +40,7 @@ public sealed class IncidentsController(
             .Include(x => x.Logs)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-        return incident is null ? NotFound() : Ok(IncidentResponse.From(incident));
+        return incident is null ? NotFound() : Ok(IncidentResponse.From(incident, includeLogs: true));
     }
 
     [HttpPost]
@@ -81,7 +82,7 @@ public sealed class IncidentsController(
                 ? "INFO" : request.Level.Trim().ToUpperInvariant(),
             OccurredAt = request.OccurredAt
         });
-        incident.UpdatedAt = DateTimeOffset.UtcNow;
+        incident.UpdatedAt = DateTime.UtcNow;
 
         await Db.SaveChangesAsync(cancellationToken);
         return NoContent();
@@ -96,7 +97,7 @@ public sealed class IncidentsController(
         if (incident is null) return NotFound();
 
         incident.Status = request.Status;
-        incident.UpdatedAt = DateTimeOffset.UtcNow;
+        incident.UpdatedAt = DateTime.UtcNow;
         await Db.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
