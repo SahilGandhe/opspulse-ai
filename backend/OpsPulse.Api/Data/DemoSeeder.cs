@@ -73,6 +73,59 @@ public static class DemoSeeder
                     Log("WARN", now.AddDays(-1).AddHours(-2).AddMinutes(-15), "Retry 5 for message msg_55177 failed with HTTP 429 too many requests"),
                     Log("INFO", now.AddDays(-1).AddHours(-2), "Operator paused consumers and drained queue; provider rate limit reset"),
                     Log("INFO", now.AddDays(-1).AddHours(-1).AddMinutes(-30), "Retry queue empty; worker healthy, marking incident resolved"),
+                }),
+            BuildIncident(
+                "Checkout latency spike after v1.9.0 deploy",
+                "Checkout page API latency jumped right after the v1.9.0 rollout; p95 stayed above the alert threshold for 40 minutes.",
+                "checkout-service", IncidentSeverity.High, IncidentStatus.Resolved,
+                now.AddDays(-3).AddHours(-4),
+                new[]
+                {
+                    Log("INFO", now.AddDays(-3).AddHours(-4), "Deployment marker: checkout-service v1.9.0 rollout started"),
+                    Log("WARN", now.AddDays(-3).AddHours(-3).AddMinutes(-50), "GET /checkout/summary latency p95 crossed 1400ms (threshold 400ms)"),
+                    Log("WARN", now.AddDays(-3).AddHours(-3).AddMinutes(-38), "GET /checkout/summary latency p95 = 1920ms; downstream pricing call slow"),
+                    Log("WARN", now.AddDays(-3).AddHours(-3).AddMinutes(-21), "Latency concentrated in PricingClient.GetQuoteAsync; upstream pricing-service p95 = 1710ms"),
+                    Log("INFO", now.AddDays(-3).AddHours(-3), "Rollback marker: checkout-service reverted to v1.8.3"),
+                    Log("INFO", now.AddDays(-3).AddHours(-2).AddMinutes(-40), "GET /checkout/summary latency p95 back to 310ms; closing incident"),
+                }),
+            BuildIncident(
+                "TLS certificate expiring on edge gateway",
+                "Certificate monitoring shows the public edge gateway certificate expires within the alert window.",
+                "edge-gateway", IncidentSeverity.Medium, IncidentStatus.Open,
+                now.AddDays(-4).AddHours(-6),
+                new[]
+                {
+                    Log("WARN", now.AddDays(-4).AddHours(-6), "TLS certificate for api.demo-example.com expires in 9 days (threshold 14 days)"),
+                    Log("WARN", now.AddDays(-4).AddHours(-2), "TLS certificate for api.demo-example.com expires in 8 days; renewal not yet scheduled"),
+                    Log("WARN", now.AddDays(-3).AddHours(-12), "TLS certificate for api.demo-example.com expires in 7 days"),
+                    Log("INFO", now.AddDays(-3).AddHours(-4), "Renewal request opened with the certificate owner; awaiting scheduled change window"),
+                }),
+            BuildIncident(
+                "Report worker OOM restarts",
+                "report-worker was restarted repeatedly after exceeding its memory limit during the nightly batch.",
+                "report-worker", IncidentSeverity.Critical, IncidentStatus.Resolved,
+                now.AddDays(-8).AddHours(-2),
+                new[]
+                {
+                    Log("WARN", now.AddDays(-8).AddHours(-2), "Memory usage 82% of 512Mi limit during nightly report batch"),
+                    Log("ERROR", now.AddDays(-8).AddHours(-1).AddMinutes(-48), "System.OutOfMemoryException: Exception of type 'System.OutOfMemoryException' was thrown. at Reporting.Worker.Rendering.PdfRenderer.Render(ReportJob job)"),
+                    Log("ERROR", now.AddDays(-8).AddHours(-1).AddMinutes(-41), "Container report-worker-7d9f restarted by orchestrator (OOMKilled, exit 137)"),
+                    Log("ERROR", now.AddDays(-8).AddHours(-1).AddMinutes(-22), "System.OutOfMemoryException during batch job job_44821 processing 38000 rows in a single pass"),
+                    Log("WARN", now.AddDays(-8).AddHours(-1).AddMinutes(-5), "Memory pressure: GC overhead 41% during batch window"),
+                    Log("INFO", now.AddDays(-7).AddHours(-20), "Batch switched to 2000-row pages; nightly run completed within memory limit, incident resolved"),
+                }),
+            BuildIncident(
+                "Intermittent DNS resolution failures",
+                "inventory-service intermittently failed to resolve its cache host, causing transient checkout errors.",
+                "inventory-service", IncidentSeverity.Medium, IncidentStatus.Resolved,
+                now.AddDays(-12).AddHours(-3),
+                new[]
+                {
+                    Log("ERROR", now.AddDays(-12).AddHours(-3), "System.Net.Sockets.SocketException: No such host is known. (cache.demo-example.internal:6379)"),
+                    Log("WARN", now.AddDays(-12).AddHours(-2).AddMinutes(-50), "Name resolution retry succeeded after 2 attempts for cache.demo-example.internal"),
+                    Log("ERROR", now.AddDays(-12).AddHours(-2).AddMinutes(-33), "System.Net.Sockets.SocketException: No such host is known. (cache.demo-example.internal:6379)"),
+                    Log("WARN", now.AddDays(-12).AddHours(-2).AddMinutes(-10), "DNS latency to resolver 10.0.0.2 spiked to 900ms during failure window"),
+                    Log("INFO", now.AddDays(-12).AddHours(-1), "Resolver failover completed; no further resolution failures observed, incident resolved"),
                 }));
 
         await db.SaveChangesAsync(cancellationToken);
