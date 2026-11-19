@@ -4,7 +4,7 @@
 
 OpsPulse AI helps small engineering teams investigate production incidents by analyzing application logs, identifying evidence-backed root-cause hypotheses, and generating actionable troubleshooting recommendations.
 
-> Project status: Early-stage MVP scaffold. Core repository structure and local development foundation are provided. Gemini and Google Cloud integrations require configuration and implementation/testing before production use.
+> Project status: Working demo. The API runs zero-config with a seeded SQLite demo database, and the React dashboard shows evidence-linked, clearly labeled **simulated** analysis (deterministic, local, no external AI). The Gemini adapter, authentication, multi-tenancy, migrations, tests and production deployment are still open before real customer use.
 
 ## Product goals
 
@@ -93,7 +93,26 @@ opspulse-ai/
 - Docker Desktop (recommended)
 - Git
 
-## Run locally
+## Run the demo (zero config)
+
+No database, Docker or API keys needed. The demo uses a local SQLite file and seeds four synthetic incidents on first run.
+
+```bash
+# Terminal 1: API on http://localhost:5000
+cd backend/OpsPulse.Api
+dotnet run
+
+# Terminal 2: dashboard on http://localhost:5173
+cd frontend/opspulse-web
+npm install
+npm run dev
+```
+
+Open http://localhost:5173, select an incident and choose **Run simulated analysis**. Without the API running, the dashboard falls back to a fully in-browser demo mode; both modes are labeled SIMULATED and use synthetic data only. Analysis never executes commands, SQL or remediation; it suggests steps for a human operator.
+
+To use PostgreSQL instead of the SQLite demo database, set `ConnectionStrings__DefaultConnection` and see the full setup below.
+
+## Run locally with PostgreSQL
 
 ### 1. Clone the repository
 
@@ -135,7 +154,7 @@ Commit the generated `Migrations/` folder so other developers and deployment env
 dotnet run
 ```
 
-The API uses `ConnectionStrings__DefaultConnection` when supplied. Otherwise, it uses the local development connection in `appsettings.json`.
+The API uses `ConnectionStrings__DefaultConnection` when supplied. Without it, it starts in the zero-config SQLite demo mode described above.
 
 Swagger is enabled in Development. Check the console for the actual local URL.
 
@@ -196,7 +215,7 @@ Initial endpoints:
 | GET | `/api/incidents/{id}` | Get incident |
 | POST | `/api/incidents` | Create incident |
 | POST | `/api/incidents/{id}/logs` | Add log entries |
-| POST | `/api/incidents/{id}/analyze` | Request analysis (provider setup required) |
+| POST | `/api/incidents/{id}/analyze` | Run analysis (simulated engine by default; Gemini adapter still to be implemented) |
 | PATCH | `/api/incidents/{id}/status` | Update status |
 
 See [docs/API.md](docs/API.md) for request examples and current implementation notes.
