@@ -1,4 +1,4 @@
-# Contributing to OpsPulse AI
+# Contributing to RootBeacon
 
 Thanks for your interest in contributing.
 
