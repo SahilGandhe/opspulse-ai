@@ -1,6 +1,6 @@
 import {
-  ArrowRight, ArrowUpRight, CheckCircle2, CircleDot, Clock3, FileSearch, FlaskConical,
-  GitBranch, History, Lock, Radar, ShieldCheck, Workflow, XCircle,
+  Activity, AlertCircle, ArrowRight, ArrowUpRight, CheckCircle2, CircleDot, Clock3, FileSearch, FlaskConical,
+  GitBranch, History, Lock, Radar, Settings as SettingsIcon, ShieldCheck, Workflow, XCircle, Zap,
 } from 'lucide-react'
 import { navigate } from '../router'
 import { useStore } from '../store'
@@ -79,6 +79,37 @@ const FEATURES = [
   },
 ]
 
+const APP_SCREENS = [
+  {
+    icon: Activity,
+    title: 'Overview',
+    short: 'Overview',
+    path: '/overview',
+    text: 'The live operations dashboard: active incidents, severity and status breakdowns, 14-day activity and the needs-attention list.',
+  },
+  {
+    icon: AlertCircle,
+    title: 'Incidents',
+    short: 'Incidents',
+    path: '/incidents',
+    text: 'Search, filter and sort the seeded incidents, then open one to read its raw logs and run the simulated analysis.',
+  },
+  {
+    icon: Zap,
+    title: 'AI Investigations',
+    short: 'Investigations',
+    path: '/investigations',
+    text: 'Every analysis run is saved here with its hypotheses, confidence scores and redacted evidence excerpts.',
+  },
+  {
+    icon: SettingsIcon,
+    title: 'Settings',
+    short: 'Settings',
+    path: '/settings',
+    text: 'Workspace name, demo home screen, table density and alert threshold, persisted in your browser.',
+  },
+]
+
 export function Landing() {
   const { settings, mode } = useStore()
   const demoPath = settings.landing === 'incidents' ? '/incidents' : '/overview'
@@ -90,6 +121,7 @@ export function Landing() {
         <div className="landing-nav-inner">
           <div className="brand"><div className="brand-mark"><Radar size={18} /></div><span>RootBeacon</span></div>
           <nav className="landing-links">
+            <button type="button" onClick={() => scrollToId('app')}>The app</button>
             <button type="button" onClick={() => scrollToId('problem')}>Problem</button>
             <button type="button" onClick={() => scrollToId('how')}>How it works</button>
             <button type="button" onClick={() => scrollToId('features')}>Features</button>
@@ -149,6 +181,24 @@ export function Landing() {
         <div><strong>48</strong><span>attached log records</span></div>
         <div><strong>Every</strong><span>hypothesis linked to log evidence</span></div>
         <div><strong>Human-led</strong><span>fixes suggested, never executed</span></div>
+      </section>
+
+      <section className="landing-section" id="app">
+        <div className="section-heading">
+          <div className="eyebrow"><span className="live-dot" /> INSIDE THE DEMO APP</div>
+          <h2>Four screens, all live right now</h2>
+          <p>Nothing was removed and nothing here is a mockup. Each card below opens that screen in the real demo, running on synthetic data.</p>
+        </div>
+        <div className="card-grid two">
+          {APP_SCREENS.map(s => (
+            <button className="landing-card app-screen" key={s.title} type="button" onClick={() => navigate(s.path)}>
+              <div className="landing-card-icon"><s.icon size={19} /></div>
+              <strong>{s.title}</strong>
+              <p>{s.text}</p>
+              <span className="app-screen-link">Open {s.short} <ArrowRight size={13} /></span>
+            </button>
+          ))}
+        </div>
       </section>
 
       <section className="landing-section" id="problem">
@@ -243,6 +293,10 @@ export function Landing() {
         <div className="brand"><div className="brand-mark"><Radar size={16} /></div><span>RootBeacon</span></div>
         <p>Demo build · synthetic data only · analysis simulated, no external AI called</p>
       </footer>
+
+      <button className="landing-mobile-cta" type="button" onClick={openDemo}>
+        Open the live demo <ArrowRight size={15} />
+      </button>
     </div>
   )
 }
