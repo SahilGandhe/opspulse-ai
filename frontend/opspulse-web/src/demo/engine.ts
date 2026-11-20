@@ -143,7 +143,7 @@ export const DEMO_INCIDENTS: Incident[] = [
       log('WARN', min(31), 'POST /payments latency p95 crossed 2500ms (threshold 800ms)', 1),
       log('ERROR', min(29), 'Unhandled exception while processing POST /payments for customer cust_88412', 2),
       log('ERROR', min(29), 'System.NullReferenceException: Object reference not set to an instance of an object. at Payments.Api.Services.PricingService.ApplyDiscount(Order order) in /src/Services/PricingService.cs:line 148', 3),
-      log('ERROR', min(27), 'HTTP 500 returned to caller POST /payments trace_id=9f2c1a api_key=sk_live_demo12345abcdef', 4),
+      log('ERROR', min(27), 'HTTP 500 returned to caller POST /payments trace_id=9f2c1a api_key=sk_live_FAKE_DEMO_KEY_0000', 4),
       log('ERROR', min(24), 'Unhandled exception while processing POST /payments for customer cust_90017', 5),
       log('ERROR', min(23), 'System.NullReferenceException: Object reference not set to an instance of an object. at Payments.Api.Services.PricingService.ApplyDiscount(Order order) in /src/Services/PricingService.cs:line 148', 6),
       log('INFO', min(21), 'Deployment marker: payment-service v2.14.0 rolled out 40 minutes before first error', 7),
@@ -285,4 +285,4 @@ export function analyzeLocally(target: Incident): Promise<IncidentAnalysisResult
     safetyNotice: SAFETY_NOTICE,
     message: 'Simulated analysis completed.',
   })
-      }
+}
