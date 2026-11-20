@@ -187,7 +187,7 @@ export function Landing() {
         <div className="section-heading">
           <div className="eyebrow"><span className="live-dot" /> INSIDE THE DEMO APP</div>
           <h2>Four screens, all live right now</h2>
-          <p>Nothing was removed and nothing here is a mockup. Each card below opens that screen in the real demo, running on synthetic data.</p>
+          <p>Each screen below opens straight into the live interactive demo, which runs on synthetic data with a simulated analysis engine.</p>
         </div>
         <div className="card-grid two">
           {APP_SCREENS.map(s => (
