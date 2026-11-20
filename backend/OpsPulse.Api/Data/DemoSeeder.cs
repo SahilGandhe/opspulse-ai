@@ -25,7 +25,7 @@ public static class DemoSeeder
                     Log("WARN", now.AddMinutes(-31), "POST /payments latency p95 crossed 2500ms (threshold 800ms)"),
                     Log("ERROR", now.AddMinutes(-29), "Unhandled exception while processing POST /payments for customer cust_88412"),
                     Log("ERROR", now.AddMinutes(-29), "System.NullReferenceException: Object reference not set to an instance of an object. at Payments.Api.Services.PricingService.ApplyDiscount(Order order) in /src/Services/PricingService.cs:line 148"),
-                    Log("ERROR", now.AddMinutes(-27), "HTTP 500 returned to caller POST /payments trace_id=9f2c1a api_key=sk_live_demo12345abcdef"),
+                    Log("ERROR", now.AddMinutes(-27), "HTTP 500 returned to caller POST /payments trace_id=9f2c1a api_key=sk_live_FAKE_DEMO_KEY_0000"),
                     Log("ERROR", now.AddMinutes(-24), "Unhandled exception while processing POST /payments for customer cust_90017"),
                     Log("ERROR", now.AddMinutes(-23), "System.NullReferenceException: Object reference not set to an instance of an object. at Payments.Api.Services.PricingService.ApplyDiscount(Order order) in /src/Services/PricingService.cs:line 148"),
                     Log("INFO", now.AddMinutes(-21), "Deployment marker: payment-service v2.14.0 rolled out 40 minutes before first error"),
