@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
-  Activity, AlertCircle, Bell, ChevronDown, FlaskConical, Search,
+  Activity, AlertCircle, Bell, ChevronDown, FlaskConical, Loader2, Search,
   Settings as SettingsIcon, ShieldCheck, Zap,
 } from 'lucide-react'
 import { navigate, routePath } from '../router'
@@ -30,7 +30,7 @@ const TITLES: Record<Route['name'], string> = {
 }
 
 export function Shell({ route, onOpenSearch, children }: { route: Route; onOpenSearch: () => void; children: ReactNode }) {
-  const { mode, incidents, investigations, settings, health } = useStore()
+  const { mode, incidents, investigations, settings, health, useBrowserDemo } = useStore()
   const [alertsOpen, setAlertsOpen] = useState(false)
   const alertsRef = useRef<HTMLDivElement>(null)
 
@@ -128,9 +128,16 @@ export function Shell({ route, onOpenSearch, children }: { route: Route; onOpenS
             <div className="notice ok"><div className="notice-icon"><ShieldCheck size={18} /></div><div><strong>Demo environment</strong><p>Connected to the RootBeacon API with a seeded SQLite demo database. All incidents are synthetic. Analysis is simulated and deterministic, not a live AI model. The public demo is read-only.</p></div><span className="notice-tag">DEMO DATA</span></div>
           )}
 
-          {children}
+          {mode === 'loading' ? (
+            <div className="loading-panel">
+              <Loader2 className="spin" size={30} />
+              <strong>Waking up the demo server...</strong>
+              <p>The free demo host sleeps when idle, so the first visit can take up to a minute. This page connects on its own as soon as the API is up.</p>
+              <button className="text-button" type="button" onClick={useBrowserDemo}>Skip the wait and explore the in-browser demo</button>
+            </div>
+          ) : children}
 
-          <footer><span>RootBeacon <b>·</b> Demo build, synthetic data only</span><span>{mode === 'api' ? `API: ${health?.database ?? 'connected'}` : 'Standalone browser demo'}</span></footer>
+          <footer><span>RootBeacon <b>·</b> Demo build, synthetic data only</span><span>{mode === 'api' ? `API: ${health?.database ?? 'connected'}` : mode === 'loading' ? 'Connecting to the demo API' : 'Standalone browser demo'}</span></footer>
         </section>
 
         <nav className="mobile-nav">
