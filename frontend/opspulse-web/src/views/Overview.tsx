@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import { AlertCircle, ArrowUpRight, CheckCircle2, FileText, ShieldAlert } from 'lucide-react'
+import { AlertCircle, ArrowUpRight, CheckCircle2, FileText, ShieldAlert, X } from 'lucide-react'
 import { IncidentTable } from '../components/IncidentTable'
 import { dayKey, formatDay, SEVERITIES, severityRank, STATUSES } from '../format'
 import { navigate } from '../router'
@@ -64,6 +64,33 @@ function Breakdown({ title, subtitle, items }: { title: string; subtitle: string
   )
 }
 
+const GUIDE_KEY = 'rootbeacon.guideDismissed.v1'
+
+function DemoGuide() {
+  const [dismissed, setDismissed] = useState(() => {
+    try { return window.localStorage.getItem(GUIDE_KEY) === '1' } catch { return false }
+  })
+  if (dismissed) return null
+  const dismiss = () => {
+    setDismissed(true)
+    try { window.localStorage.setItem(GUIDE_KEY, '1') } catch { /* storage unavailable */ }
+  }
+  return (
+    <div className="panel demo-guide">
+      <div className="panel-heading">
+        <div><h3>Explore the demo</h3><p>A two-minute tour of the incident workflow, all on synthetic data</p></div>
+        <button className="icon-button" type="button" aria-label="Dismiss guide" onClick={dismiss}><X size={15} /></button>
+      </div>
+      <ol className="guide-steps">
+        <li><strong>Pick an incident</strong><span>Open a critical or high-severity incident from Needs attention.</span></li>
+        <li><strong>Review the logs</strong><span>Raw records stay immutable; filter them by level.</span></li>
+        <li><strong>Run simulated analysis</strong><span>Get evidence-linked hypotheses. Emails, IPs and keys are redacted at the analysis boundary.</span></li>
+        <li><strong>Revisit investigations</strong><span>Every run is saved under AI Investigations in this browser.</span></li>
+      </ol>
+    </div>
+  )
+}
+
 export function Overview() {
   const { incidents, settings } = useStore()
 
@@ -81,6 +108,8 @@ export function Overview() {
       <div className="page-heading">
         <div><div className="eyebrow"><span className="live-dot" /> INCIDENT INTELLIGENCE</div><h1>Operations overview</h1><p>Live view of synthetic demo incidents across your services.</p></div>
       </div>
+
+      <DemoGuide />
 
       <div className="metrics">
         <Metric label="Active incidents" value={String(active.length)} change="Open or investigating" icon={<AlertCircle size={18} />} tone="orange" />
