@@ -28,6 +28,8 @@ The initial scaffold includes a .NET API, React/TypeScript frontend, PostgreSQL 
 
 ## Architecture
 
+Target architecture for a production deployment. The current demo runs zero-config: a local SQLite database and a deterministic, simulated analyzer stand in for PostgreSQL and Gemini below.
+
 ```mermaid
 flowchart TD
     U[Engineer] --> FE[React + TypeScript]
@@ -81,9 +83,9 @@ opspulse-ai/
 | Frontend | React, TypeScript, Vite |
 | Backend | C#, ASP.NET Core Web API, .NET 10 |
 | Data access | Entity Framework Core |
-| Database | PostgreSQL |
-| AI | Google Gemini API (adapter to be configured) |
-| Cloud | Google Cloud Run, Cloud SQL, Secret Manager |
+| Database | PostgreSQL (planned; the demo uses SQLite) |
+| AI | Google Gemini API (planned; the demo uses a local simulated analyzer) |
+| Cloud | Google Cloud Run, Cloud SQL, Secret Manager (planned) |
 | CI | GitHub Actions |
 | Local containers | Docker |
 
@@ -97,7 +99,7 @@ opspulse-ai/
 
 ## Run the demo (zero config)
 
-No database, Docker or API keys needed. The demo uses a local SQLite file and seeds four synthetic incidents on first run.
+No database, Docker or API keys needed. The demo uses a local SQLite file and seeds eight synthetic incidents on first run.
 
 ```bash
 # Terminal 1: API on http://localhost:5000
