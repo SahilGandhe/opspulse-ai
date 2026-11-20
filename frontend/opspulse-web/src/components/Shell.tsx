@@ -70,7 +70,7 @@ export function Shell({ route, onOpenSearch, children }: { route: Route; onOpenS
               href={`#${routePath(item.route)}`}
             >
               <item.icon size={17} /> {item.label}
-              {item.route.name === 'incidents' && <span className="nav-count">{incidents.length}</span>}
+              {item.route.name === 'incidents' && mode !== 'loading' && <span className="nav-count">{incidents.length}</span>}
               {item.route.name === 'investigations' && investigations.length > 0 && <span className="nav-count">{investigations.length}</span>}
             </a>
           ))}
