@@ -219,7 +219,8 @@ button.topbar-brand{border:0;background:none;color:inherit;cursor:pointer}
 .primary-button.big,.secondary-button.big{padding:13px 19px;font-size:13px}
 .hero-note{color:#63738a;font-size:11px;margin:0;max-width:520px;line-height:1.65}
 .hero-visual{display:flex;justify-content:center}
-.demo-card{width:100%;max-width:430px;background:#101a28;border:1px solid #22334a;border-radius:14px;padding:18px;box-shadow:0 30px 80px #0008;display:flex;flex-direction:column;gap:10px}
+.demo-card{width:100%;max-width:430px;background:#101a28;border:1px solid #22334a;border-radius:14px;padding:18px;box-shadow:0 30px 80px #0008;display:flex;flex-direction:column;gap:10px;position:relative}
+.demo-card-tag{position:absolute;top:-9px;right:14px;background:#221a09;border:1px solid #4d3a12;color:#ffc46b;font-size:8px;letter-spacing:1px;font-weight:700;border-radius:5px;padding:3px 7px}
 .demo-card-head{display:flex;align-items:center;gap:9px}
 .demo-card-head strong{font-size:12.5px;flex:1;min-width:0}
 .demo-card-label{font-size:8.5px;letter-spacing:1.4px;color:#63738a;font-weight:700;margin-top:4px}
