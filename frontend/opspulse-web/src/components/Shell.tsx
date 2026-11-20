@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
-  Activity, AlertCircle, Bell, ChevronDown, FlaskConical, Loader2, Search,
+  Activity, AlertCircle, Bell, ChevronDown, FlaskConical, Home, Loader2, Radar, Search,
   Settings as SettingsIcon, ShieldCheck, Zap,
 } from 'lucide-react'
 import { navigate, routePath } from '../router'
@@ -22,6 +22,7 @@ function isActive(current: Route, item: Route): boolean {
 }
 
 const TITLES: Record<Route['name'], string> = {
+  landing: 'Home',
   overview: 'Overview',
   incidents: 'Incidents',
   incident: 'Incident detail',
@@ -55,7 +56,7 @@ export function Shell({ route, onOpenSearch, children }: { route: Route; onOpenS
   return (
     <div className={`app-shell density-${settings.density}`}>
       <aside className="sidebar">
-        <div className="brand"><div className="brand-mark"><Activity size={19} /></div><span>RootBeacon</span></div>
+        <button className="brand" type="button" onClick={() => navigate('/')} title="RootBeacon landing page"><div className="brand-mark"><Radar size={18} /></div><span>RootBeacon</span></button>
         <button className="workspace" type="button" onClick={() => navigate('/settings')} title="Open workspace settings">
           <div className="workspace-avatar">{settings.workspaceName.slice(0, 1).toUpperCase() || 'W'}</div>
           <div><strong>{settings.workspaceName}</strong><small>Demo workspace</small></div>
@@ -76,6 +77,7 @@ export function Shell({ route, onOpenSearch, children }: { route: Route; onOpenS
           ))}
         </nav>
         <div className="sidebar-bottom">
+          <button className="landing-link" type="button" onClick={() => navigate('/')}><Home size={13} /> Landing page</button>
           <div className="status-card">
             <span className="status-dot" />
             <div>
@@ -89,7 +91,7 @@ export function Shell({ route, onOpenSearch, children }: { route: Route; onOpenS
 
       <main className="main">
         <header className="topbar">
-          <div className="topbar-brand"><div className="brand-mark"><Activity size={16} /></div><span>RootBeacon</span></div>
+          <button className="topbar-brand" type="button" onClick={() => navigate('/')} title="RootBeacon landing page"><div className="brand-mark"><Radar size={15} /></div><span>RootBeacon</span></button>
           <div className="breadcrumbs">Workspace <span>/</span> <strong>{TITLES[route.name]}</strong></div>
           <div className="top-actions">
             <button className="search" type="button" onClick={onOpenSearch}>
