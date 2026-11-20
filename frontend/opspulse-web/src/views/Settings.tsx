@@ -41,7 +41,9 @@ export function Settings() {
           <div className="panel-heading sub"><div><h3><SlidersHorizontal size={14} /> Preferences</h3><p>Applied immediately after saving</p></div></div>
 
           <label className="field">
-            <span>Default landing page</span>
+            <span>Demo home screen
+              <small>Where the demo opens from the landing page</small>
+            </span>
             <select value={draft.landing} onChange={e => setDraft(d => ({ ...d, landing: e.target.value as SettingsShape['landing'] }))}>
               <option value="overview">Overview</option>
               <option value="incidents">Incidents</option>
