@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 export type Route =
+  | { name: 'landing' }
   | { name: 'overview' }
   | { name: 'incidents' }
   | { name: 'incident'; id: string }
@@ -13,11 +14,13 @@ export function parseHash(hash: string): Route {
   if (parts[0] === 'incidents') return { name: 'incidents' }
   if (parts[0] === 'investigations') return { name: 'investigations' }
   if (parts[0] === 'settings') return { name: 'settings' }
-  return { name: 'overview' }
+  if (parts[0] === 'overview') return { name: 'overview' }
+  return { name: 'landing' }
 }
 
 export function routePath(route: Route): string {
   switch (route.name) {
+    case 'landing': return '/'
     case 'incidents': return '/incidents'
     case 'incident': return `/incidents/${encodeURIComponent(route.id)}`
     case 'investigations': return '/investigations'
