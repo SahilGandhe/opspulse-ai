@@ -125,19 +125,20 @@ export function Landing() {
 
         <div className="hero-visual" aria-hidden="true">
           <div className="demo-card">
+            <span className="demo-card-tag">ILLUSTRATIVE PREVIEW</span>
             <div className="demo-card-head">
               <span className="severity-dot critical" />
               <strong>Payment API returning HTTP 500</strong>
               <span className="status-pill investigating"><CircleDot size={10} />Investigating</span>
             </div>
-            <div className="demo-card-label">ROOT-CAUSE HYPOTHESIS</div>
+            <div className="demo-card-label">ROOT-CAUSE HYPOTHESIS, SIMULATED</div>
             <div className="demo-card-hyp">
-              <div className="hyp-head"><strong>Database connection pool exhausted</strong><span className="confidence">87% High</span></div>
-              <div className="confidence-bar"><div style={{ width: '87%' }} /></div>
+              <div className="hyp-head"><strong>Unhandled application exception (HTTP 500)</strong><span className="confidence">95% high (heuristic)</span></div>
+              <div className="confidence-bar"><div style={{ width: '95%' }} /></div>
             </div>
             <div className="demo-card-label">EVIDENCE (REDACTED)</div>
-            <div className="demo-card-ev"><span className="log-level error">ERROR</span><code>SQL connection pool exhausted, api_key=[redacted-secret]</code></div>
-            <div className="demo-card-ev"><span className="log-level warn">WARN</span><code>Retrying request from [redacted-ip] after timeout</code></div>
+            <div className="demo-card-ev"><span className="log-level error">ERROR</span><code>Unhandled exception while processing POST /payments for customer cust_88412</code></div>
+            <div className="demo-card-ev"><span className="log-level error">ERROR</span><code>HTTP 500 returned to caller, api_key=[redacted-secret]</code></div>
             <div className="demo-card-foot"><ShieldCheck size={12} /> Fix suggested, executed by a human operator</div>
           </div>
         </div>
@@ -146,8 +147,8 @@ export function Landing() {
       <section className="landing-strip">
         <div><strong>8</strong><span>synthetic demo incidents</span></div>
         <div><strong>48</strong><span>attached log records</span></div>
-        <div><strong>100%</strong><span>hypotheses cite evidence</span></div>
-        <div><strong>0</strong><span>fixes executed by AI</span></div>
+        <div><strong>Every</strong><span>hypothesis linked to log evidence</span></div>
+        <div><strong>Human-led</strong><span>fixes suggested, never executed</span></div>
       </section>
 
       <section className="landing-section" id="problem">
