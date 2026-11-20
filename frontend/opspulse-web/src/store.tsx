@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { api } from './api'
 import { analyzeLocally, DEMO_INCIDENTS } from './demo/engine'
@@ -49,7 +49,14 @@ interface Store {
   clearInvestigations: () => void
   loadIncident: (id: string) => Promise<Incident | null>
   runAnalysis: (incident: Incident) => Promise<IncidentAnalysisResult>
+  useBrowserDemo: () => void
 }
+
+// The hosted demo rides a free host that sleeps when idle, so the first
+// API call can take up to a minute while the server wakes. Keep retrying
+// for a while before falling back to the in-browser demo.
+const CONNECT_TIMEOUT_MS = 45_000
+const CONNECT_RETRY_MS = 3_000
 
 const SETTINGS_KEY = 'rootbeacon.settings.v1'
 const INVESTIGATIONS_KEY = 'rootbeacon.investigations.v1'
@@ -96,15 +103,34 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(() => readJson(SETTINGS_KEY, DEFAULT_SETTINGS))
   const [investigations, setInvestigations] = useState<InvestigationRecord[]>(() => readList(INVESTIGATIONS_KEY))
 
+  const connectCancelled = useRef(false)
+
   useEffect(() => {
-    let cancelled = false
-    api.health()
-      .then(async h => {
+    connectCancelled.current = false
+    const started = Date.now()
+    const attempt = async () => {
+      try {
+        const h = await api.health()
         const list = await api.listIncidents()
-        if (!cancelled) { setHealth(h); setIncidents(list); setMode('api') }
-      })
-      .catch(() => { if (!cancelled) { setIncidents(DEMO_INCIDENTS); setMode('browser-demo') } })
-    return () => { cancelled = true }
+        if (!connectCancelled.current) { setHealth(h); setIncidents(list); setMode('api') }
+      } catch {
+        if (connectCancelled.current) return
+        if (Date.now() - started < CONNECT_TIMEOUT_MS) {
+          setTimeout(() => { void attempt() }, CONNECT_RETRY_MS)
+        } else {
+          setIncidents(DEMO_INCIDENTS)
+          setMode('browser-demo')
+        }
+      }
+    }
+    void attempt()
+    return () => { connectCancelled.current = true }
+  }, [])
+
+  const useBrowserDemo = useCallback(() => {
+    connectCancelled.current = true
+    setIncidents(DEMO_INCIDENTS)
+    setMode('browser-demo')
   }, [])
 
   const updateSettings = useCallback((patch: Partial<Settings>) => {
@@ -158,9 +184,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<Store>(() => ({
     mode, incidents, health, settings, updateSettings, resetSettings,
-    investigations, clearInvestigations, loadIncident, runAnalysis,
+    investigations, clearInvestigations, loadIncident, runAnalysis, useBrowserDemo,
   }), [mode, incidents, health, settings, updateSettings, resetSettings,
-    investigations, clearInvestigations, loadIncident, runAnalysis])
+    investigations, clearInvestigations, loadIncident, runAnalysis, useBrowserDemo])
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
